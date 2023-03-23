@@ -1,15 +1,17 @@
 export const logger = (store) => (next) => (action) =>{
-    console.log(action)
     next(action)
 }
 
-export const featuring = (store) => (next) => (actionInfo) => {
-    const featured = [{name: 'eddie'}, ...actionInfo.action.payload];
-    console.log('featured', featured)
-    const updatedActionInfo = {
-        ...actionInfo,
-        action: { ...actionInfo.action, payload: featured },
-      };
-    console.log('updated', updatedActionInfo)
-    next(updatedActionInfo)
+export const toUpper = (store) => (next) => (action) => {
+    const featured = action.action.payload.map(pokemon => {
+        return {
+            ...pokemon,
+            name: pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1),
+        }
+    });
+    const updateAction = {
+        ...action,
+        action: {...action.action, payload:featured }
+    }
+    next(updateAction)
 }
